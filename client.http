@@ -1,0 +1,21 @@
+
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "email": "alice@example.com"
+}
+
+###
+
+PUT http://localhost:8080/customers/1
+Content-Type: application/json
+
+{
+  "name": "Alice Smith",
+  "email": "alice.smith@example.com"
+}
+
+###
+DELETE  http://localhost:8080/customers/1
