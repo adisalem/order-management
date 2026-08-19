@@ -1,10 +1,14 @@
 package com.example.orders.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +25,9 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items = new ArrayList<>();
+
     public Order() {
     }
 
@@ -36,11 +43,19 @@ public class Order {
         return customer;
     }
 
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 }

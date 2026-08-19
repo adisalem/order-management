@@ -15,3 +15,14 @@ Content-Type: application/json
   "status": "NEW",
   "customerId": 1
 }
+
+###
+
+POST http://localhost:8080/order-items
+Content-Type: application/json
+
+{
+  "product": "Laptop",
+  "quantity": 2,
+  "orderId": 1
+}
