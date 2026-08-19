@@ -50,11 +50,31 @@ public class ProductController {
             @RequestParam String name,
             Pageable pageable) {
 
-        return productService.searchProducts(name, pageable);
+        return productService.searchProductsByName(
+                name,
+                pageable
+        );
     }
 
+@GetMapping("/search-spec")
+public PageResponse<ProductResponse> searchProductsWithSpecification(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Double minPrice,
+        @RequestParam(required = false) Double maxPrice,
+        Pageable pageable) {
+
+    return productService.searchProductsWithSpecification(
+            name,
+            minPrice,
+            maxPrice,
+            pageable
+    );
+}
+
     @GetMapping("/{id}")
-    public ProductResponse getProduct(@PathVariable Long id) {
+    public ProductResponse getProduct(
+            @PathVariable Long id) {
+
         return productService.getProduct(id);
     }
 
@@ -68,7 +88,20 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(
+            @PathVariable Long id) {
+
         productService.deleteProduct(id);
     }
+
+    @PutMapping("/{id}/price/dirty-checking")
+public ProductResponse updatePriceUsingDirtyChecking(
+        @PathVariable Long id,
+        @RequestParam Double price) {
+
+    return productService.updatePriceUsingDirtyChecking(
+            id,
+            price
+    );
+}
 }

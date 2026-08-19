@@ -1,5 +1,4 @@
 ### Create Customer
-
 POST http://localhost:8080/customers
 Content-Type: application/json
 
@@ -11,31 +10,89 @@ Content-Type: application/json
 ###
 
 ### Create Product 1
-
 POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "name": "Keyboard",
-  "price": 80
+  "name": "Laptop",
+  "price": 1000
 }
 
 ###
 
 ### Create Product 2
-
 POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "name": "Monitor",
-  "price": 300
+  "name": "Mouse",
+  "price": 50
 }
 
 ###
 
-### Create Order with TWO items
+### Get Product
+GET http://localhost:8080/products/1
 
+###
+
+### Get Products
+GET http://localhost:8080/products?page=0&size=10
+
+###
+
+### Get Products Sorted
+GET http://localhost:8080/products?page=0&size=10&sort=price,asc
+
+###
+
+### Search by Name
+GET http://localhost:8080/products/search?name=laptop&page=0&size=10
+
+###
+
+### Specification - Name
+GET http://localhost:8080/products/search-spec?name=laptop&page=0&size=10
+
+###
+
+### Specification - Minimum Price
+GET http://localhost:8080/products/search-spec?minPrice=500&page=0&size=10
+
+###
+
+### Specification - All Filters
+GET http://localhost:8080/products/search-spec?name=laptop&minPrice=500&maxPrice=1500&page=0&size=10&sort=price,asc
+
+###
+
+### Get Product Before Dirty Checking
+GET http://localhost:8080/products/1
+
+###
+
+### Update Price Using Dirty Checking
+PUT http://localhost:8080/products/1/price/dirty-checking?price=1200
+
+###
+
+### Get Product After Dirty Checking
+GET http://localhost:8080/products/1
+
+###
+
+### Normal Product Update
+PUT http://localhost:8080/products/1
+Content-Type: application/json
+
+{
+  "name": "Laptop Updated",
+  "price": 1300
+}
+
+###
+
+### Create Order
 POST http://localhost:8080/orders
 Content-Type: application/json
 
@@ -44,7 +101,7 @@ Content-Type: application/json
   "items": [
     {
       "productId": 1,
-      "quantity": 1
+      "quantity": 2
     },
     {
       "productId": 2,
@@ -55,20 +112,41 @@ Content-Type: application/json
 
 ###
 
-### Check all order items
-
-GET http://localhost:8080/order-items
-
-### Remove one item from Order 2
-
-DELETE http://localhost:8080/orders/2/items/3
-
-### Verify Order 2 still exists
-
-GET http://localhost:8080/orders/2
+### Get Order
+GET http://localhost:8080/orders/1
 
 ###
 
-### Verify remaining items
+### Get Orders
+GET http://localhost:8080/orders
 
+###
+
+### Get Order Items
 GET http://localhost:8080/order-items
+
+###
+
+### Get Order Item
+GET http://localhost:8080/order-items/1
+
+###
+
+### Remove Item from Order
+DELETE http://localhost:8080/orders/1/items/1
+
+###
+
+### Get Order After Removing Item
+GET http://localhost:8080/orders/1
+
+###
+GET http://localhost:8080/products/1
+
+###
+
+PUT http://localhost:8080/products/1/price/dirty-checking?price=1200
+
+###
+
+GET http://localhost:8080/products/1

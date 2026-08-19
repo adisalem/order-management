@@ -56,7 +56,6 @@ public class OrderService {
                     new ProductNotFoundException(itemRequest.productId()));
 
             OrderItem item = new OrderItem();
-
             item.setProduct(product);
             item.setQuantity(itemRequest.quantity());
 
