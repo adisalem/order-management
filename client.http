@@ -1,4 +1,3 @@
-
 POST http://localhost:8080/customers
 Content-Type: application/json
 
@@ -9,13 +8,10 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/customers/1
+POST http://localhost:8080/orders
 Content-Type: application/json
 
 {
-  "name": "Alice Smith",
-  "email": "alice.smith@example.com"
+  "status": "NEW",
+  "customerId": 1
 }
-
-###
-DELETE  http://localhost:8080/customers/1
