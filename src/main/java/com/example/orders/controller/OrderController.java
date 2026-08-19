@@ -66,4 +66,13 @@ public class OrderController {
     public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
     }
+
+    @DeleteMapping("/{orderId}/items/{itemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeItemFromOrder(
+            @PathVariable Long orderId,
+            @PathVariable Long itemId) {
+
+        orderService.removeItemFromOrder(orderId, itemId);
+    }
 }

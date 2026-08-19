@@ -1,19 +1,74 @@
-### Create Product
+### Create Customer
+
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+  "name": "Charlie",
+  "email": "charlie@example.com"
+}
+
+###
+
+### Create Product 1
 
 POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "name": "Laptop",
-  "price": 1000
+  "name": "Keyboard",
+  "price": 80
 }
 
-### Update Product
+###
 
-PUT http://localhost:8080/products/1
+### Create Product 2
+
+POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "name": "Laptop Pro",
-  "price": 1200
+  "name": "Monitor",
+  "price": 300
 }
+
+###
+
+### Create Order with TWO items
+
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 1
+    },
+    {
+      "productId": 2,
+      "quantity": 1
+    }
+  ]
+}
+
+###
+
+### Check all order items
+
+GET http://localhost:8080/order-items
+
+### Remove one item from Order 2
+
+DELETE http://localhost:8080/orders/2/items/3
+
+### Verify Order 2 still exists
+
+GET http://localhost:8080/orders/2
+
+###
+
+### Verify remaining items
+
+GET http://localhost:8080/order-items

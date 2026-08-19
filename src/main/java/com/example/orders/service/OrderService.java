@@ -13,6 +13,7 @@ import com.example.orders.entity.Order;
 import com.example.orders.entity.OrderItem;
 import com.example.orders.entity.Product;
 import com.example.orders.exception.CustomerNotFoundException;
+import com.example.orders.exception.OrderItemNotFoundException;
 import com.example.orders.exception.OrderNotFoundException;
 import com.example.orders.exception.ProductNotFoundException;
 import com.example.orders.repository.CustomerRepository;
@@ -49,17 +50,17 @@ public class OrderService {
 
         for (var itemRequest : request.items()) {
 
-            Product product = productRepository.findById(itemRequest.productId())
-                    .orElseThrow(() ->
-                            new ProductNotFoundException(itemRequest.productId()));
+            Product product = productRepository.findById(
+                    itemRequest.productId()
+            ).orElseThrow(() ->
+                    new ProductNotFoundException(itemRequest.productId()));
 
             OrderItem item = new OrderItem();
 
             item.setProduct(product);
             item.setQuantity(itemRequest.quantity());
-            item.setOrder(order);
 
-            order.getItems().add(item);
+            order.addItem(item);
         }
 
         Order savedOrder = orderRepository.save(order);
@@ -112,6 +113,24 @@ public class OrderService {
                         new OrderNotFoundException(id));
 
         orderRepository.delete(order);
+    }
+
+    @Transactional
+    public void removeItemFromOrder(Long orderId, Long itemId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new OrderNotFoundException(orderId));
+
+        OrderItem item = order.getItems()
+                .stream()
+                .filter(orderItem ->
+                        orderItem.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() ->
+                        new OrderItemNotFoundException(itemId));
+
+        order.removeItem(item);
     }
 
     private OrderResponse toResponse(Order order) {
