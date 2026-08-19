@@ -43,11 +43,6 @@ public class CustomerController {
         return customerService.getCustomer(id);
     }
 
-    @GetMapping("/{id}/orders")
-    public List<OrderResponse> getCustomerOrders(@PathVariable Long id) {
-        return customerService.getCustomerOrders(id);
-    }
-
     @PutMapping("/{id}")
     public CustomerResponse updateCustomer(
             @PathVariable Long id,
@@ -62,8 +57,26 @@ public class CustomerController {
         customerService.deleteCustomer(id);
     }
 
-    @GetMapping("/with-orders")
-public List<CustomerResponse> getCustomersWithOrders() {
-    return customerService.getCustomersWithOrders();
-}
+    @GetMapping("/{id}/orders")
+    public List<OrderResponse> getCustomerOrders(
+            @PathVariable Long id) {
+
+        return customerService.getCustomerOrders(id);
+    }
+
+    // JOIN FETCH approach
+    @GetMapping("/with-orders/join-fetch")
+    public List<CustomerResponse> getCustomersWithOrdersUsingJoinFetch() {
+
+        return customerService
+                .getCustomersWithOrdersUsingJoinFetch();
+    }
+
+    // EntityGraph approach
+    @GetMapping("/with-orders/entity-graph")
+    public List<CustomerResponse> getCustomersWithOrdersUsingEntityGraph() {
+
+        return customerService
+                .getCustomersWithOrdersUsingEntityGraph();
+    }
 }

@@ -1,15 +1,18 @@
 package com.example.orders.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record OrderRequest(
 
-        @NotBlank(message = "Status is required")
-        String status,
-
         @NotNull(message = "Customer ID is required")
-        Long customerId
+        Long customerId,
+
+        @NotEmpty(message = "Order must contain at least one item")
+        List<@Valid OrderItemRequest> items
 
 ) {
 }

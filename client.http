@@ -1,3 +1,26 @@
+### Create a few products
+
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "price": 1000
+}
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "Mouse",
+  "price": 50
+}
+
+###
+### Create Customer
+
 POST http://localhost:8080/customers
 Content-Type: application/json
 
@@ -7,29 +30,75 @@ Content-Type: application/json
 }
 
 ###
+### Create NEW Order
 
 POST http://localhost:8080/orders
 Content-Type: application/json
 
 {
-  "status": "NEW",
-  "customerId": 1
+  "customerId": 1,
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 2
+    }
+  ]
 }
 
 ###
 
-POST http://localhost:8080/order-items
+POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "product": "Laptop",
-  "quantity": 2,
-  "orderId": 1
+  "name": "Keyboard",
+  "price": 80
 }
 
 ###
-GET http://localhost:8080/customers/1/orders
+
+GET http://localhost:8080/products?page=0&size=1
+
+###
+GET http://localhost:8080/products/search?name=LAPTOP&page=0&size=5
+
+###
+GET http://localhost:8080/orders/search?customerId=1&status=NEW
+
+### Order summaries
+GET http://localhost:8080/orders/summaries
+
+### JOIN FETCH
+
+GET http://localhost:8080/customers/with-orders/join-fetch
 
 ###
 
-GET http://localhost:8080/customers/with-orders
+### EntityGraph
+
+GET http://localhost:8080/customers/with-orders/entity-graph
+
+### Transaction rollback test
+
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 2
+    },
+    {
+      "productId": 999,
+      "quantity": 1
+    }
+  ]
+}
+
+###
+GET http://localhost:8080/orders
+
+###
+GET http://localhost:8080/order-items

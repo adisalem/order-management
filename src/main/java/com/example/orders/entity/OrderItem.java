@@ -15,23 +15,21 @@ public class OrderItem {
     @GeneratedValue
     private Long id;
 
-    private String product;
-
     private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     public OrderItem() {
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getProduct() {
-        return product;
     }
 
     public Integer getQuantity() {
@@ -42,8 +40,8 @@ public class OrderItem {
         return order;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public Product getProduct() {
+        return product;
     }
 
     public void setQuantity(Integer quantity) {
@@ -52,5 +50,9 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
