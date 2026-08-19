@@ -86,52 +86,54 @@ public class ProductService {
         );
     }
 
-   @Transactional(readOnly = true)
-public PageResponse<ProductResponse> searchProductsWithSpecification(
-        String name,
-        Double minPrice,
-        Double maxPrice,
-        Pageable pageable) {
+    @Transactional(readOnly = true)
+    public PageResponse<ProductResponse> searchProductsWithSpecification(
+            String name,
+            Double minPrice,
+            Double maxPrice,
+            Pageable pageable) {
 
-    Specification<Product> specification = null;
+        Specification<Product> specification = null;
 
-    if (name != null && !name.isBlank()) {
-        specification = ProductSpecification.nameContains(name);
+        if (name != null && !name.isBlank()) {
+            specification = ProductSpecification.nameContains(name);
+        }
+
+        if (minPrice != null) {
+
+            Specification<Product> priceSpecification =
+                    ProductSpecification.priceGreaterThanOrEqual(minPrice);
+
+            specification = specification == null
+                    ? priceSpecification
+                    : specification.and(priceSpecification);
+        }
+
+        if (maxPrice != null) {
+
+            Specification<Product> priceSpecification =
+                    ProductSpecification.priceLessThanOrEqual(maxPrice);
+
+            specification = specification == null
+                    ? priceSpecification
+                    : specification.and(priceSpecification);
+        }
+
+        Page<Product> page = specification == null
+                ? productRepository.findAll(pageable)
+                : productRepository.findAll(specification, pageable);
+
+        return new PageResponse<>(
+                page.getContent()
+                        .stream()
+                        .map(this::toResponse)
+                        .toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
-
-    if (minPrice != null) {
-        Specification<Product> priceSpecification =
-                ProductSpecification.priceGreaterThanOrEqual(minPrice);
-
-        specification = specification == null
-                ? priceSpecification
-                : specification.and(priceSpecification);
-    }
-
-    if (maxPrice != null) {
-        Specification<Product> priceSpecification =
-                ProductSpecification.priceLessThanOrEqual(maxPrice);
-
-        specification = specification == null
-                ? priceSpecification
-                : specification.and(priceSpecification);
-    }
-
-    Page<Product> page = specification == null
-            ? productRepository.findAll(pageable)
-            : productRepository.findAll(specification, pageable);
-
-    return new PageResponse<>(
-            page.getContent()
-                    .stream()
-                    .map(this::toResponse)
-                    .toList(),
-            page.getNumber(),
-            page.getSize(),
-            page.getTotalElements(),
-            page.getTotalPages()
-    );
-}
 
     @Transactional
     public ProductResponse updateProduct(
@@ -144,6 +146,20 @@ public PageResponse<ProductResponse> searchProductsWithSpecification(
 
         product.setName(request.name());
         product.setPrice(request.price());
+
+        return toResponse(product);
+    }
+
+    @Transactional
+    public ProductResponse updatePriceUsingDirtyChecking(
+            Long id,
+            Double price) {
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(id));
+
+        product.setPrice(price);
 
         return toResponse(product);
     }
@@ -167,18 +183,4 @@ public PageResponse<ProductResponse> searchProductsWithSpecification(
                 product.getVersion()
         );
     }
-
-    @Transactional
-public ProductResponse updatePriceUsingDirtyChecking(
-        Long id,
-        Double price) {
-
-    Product product = productRepository.findById(id)
-            .orElseThrow(() ->
-                    new ProductNotFoundException(id));
-
-    product.setPrice(price);
-
-    return toResponse(product);
-}
 }
