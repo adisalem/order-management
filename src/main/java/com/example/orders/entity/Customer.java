@@ -1,5 +1,6 @@
-
 package com.example.orders.entity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -16,8 +17,9 @@ public class Customer {
 
     private String name;
     private String email;
+
     @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     protected Customer() {
     }
@@ -39,11 +41,19 @@ public class Customer {
         return email;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

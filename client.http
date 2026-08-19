@@ -26,3 +26,10 @@ Content-Type: application/json
   "quantity": 2,
   "orderId": 1
 }
+
+###
+GET http://localhost:8080/customers/1/orders
+
+###
+
+GET http://localhost:8080/customers/with-orders

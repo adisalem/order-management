@@ -1,10 +1,13 @@
 package com.example.orders.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.orders.dto.CustomerRequest;
 import com.example.orders.dto.CustomerResponse;
+import com.example.orders.dto.OrderResponse;
 import com.example.orders.entity.Customer;
 import com.example.orders.exception.CustomerNotFoundException;
 import com.example.orders.repository.CustomerRepository;
@@ -67,6 +70,41 @@ public void deleteCustomer(Long id) {
             .orElseThrow(() -> new CustomerNotFoundException(id));
 
     customerRepository.delete(customer);
+}
+
+@Transactional(readOnly = true)
+public List<OrderResponse> getCustomerOrders(Long id) {
+
+    Customer customer = customerRepository.findById(id)
+            .orElseThrow(() -> new CustomerNotFoundException(id));
+
+    return customer.getOrders()
+            .stream()
+            .map(order -> new OrderResponse(
+                    order.getId(),
+                    order.getStatus(),
+                    order.getCustomer().getId()
+            ))
+            .toList();
+}
+
+@Transactional(readOnly = true)
+public List<CustomerResponse> getCustomersWithOrders() {
+
+    List<Customer> customers =
+            customerRepository.findAllWithOrders();
+
+    return customers.stream()
+            .map(customer -> {
+                customer.getOrders().size();
+
+                return new CustomerResponse(
+                        customer.getId(),
+                        customer.getName(),
+                        customer.getEmail()
+                );
+            })
+            .toList();
 }
 
 }
