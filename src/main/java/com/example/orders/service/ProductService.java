@@ -49,7 +49,16 @@ public class ProductService {
 
         Page<Product> page = productRepository.findAll(pageable);
 
-        return toPageResponse(page);
+        return new PageResponse<>(
+                page.getContent()
+                        .stream()
+                        .map(this::toResponse)
+                        .toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +72,16 @@ public class ProductService {
                         pageable
                 );
 
-        return toPageResponse(page);
+        return new PageResponse<>(
+                page.getContent()
+                        .stream()
+                        .map(this::toResponse)
+                        .toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     @Transactional
@@ -91,27 +109,13 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    private PageResponse<ProductResponse> toPageResponse(
-            Page<Product> page) {
-
-        return new PageResponse<>(
-                page.getContent()
-                        .stream()
-                        .map(this::toResponse)
-                        .toList(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-    }
-
     private ProductResponse toResponse(Product product) {
 
         return new ProductResponse(
                 product.getId(),
                 product.getName(),
-                product.getPrice()
+                product.getPrice(),
+                product.getVersion()
         );
     }
 }

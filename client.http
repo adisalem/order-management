@@ -1,4 +1,4 @@
-### Create a few products
+### Create Product
 
 POST http://localhost:8080/products
 Content-Type: application/json
@@ -8,97 +8,12 @@ Content-Type: application/json
   "price": 1000
 }
 
-###
+### Update Product
 
-POST http://localhost:8080/products
+PUT http://localhost:8080/products/1
 Content-Type: application/json
 
 {
-  "name": "Mouse",
-  "price": 50
+  "name": "Laptop Pro",
+  "price": 1200
 }
-
-###
-### Create Customer
-
-POST http://localhost:8080/customers
-Content-Type: application/json
-
-{
-  "name": "Alice",
-  "email": "alice@example.com"
-}
-
-###
-### Create NEW Order
-
-POST http://localhost:8080/orders
-Content-Type: application/json
-
-{
-  "customerId": 1,
-  "items": [
-    {
-      "productId": 1,
-      "quantity": 2
-    }
-  ]
-}
-
-###
-
-POST http://localhost:8080/products
-Content-Type: application/json
-
-{
-  "name": "Keyboard",
-  "price": 80
-}
-
-###
-
-GET http://localhost:8080/products?page=0&size=1
-
-###
-GET http://localhost:8080/products/search?name=LAPTOP&page=0&size=5
-
-###
-GET http://localhost:8080/orders/search?customerId=1&status=NEW
-
-### Order summaries
-GET http://localhost:8080/orders/summaries
-
-### JOIN FETCH
-
-GET http://localhost:8080/customers/with-orders/join-fetch
-
-###
-
-### EntityGraph
-
-GET http://localhost:8080/customers/with-orders/entity-graph
-
-### Transaction rollback test
-
-POST http://localhost:8080/orders
-Content-Type: application/json
-
-{
-  "customerId": 1,
-  "items": [
-    {
-      "productId": 1,
-      "quantity": 2
-    },
-    {
-      "productId": 999,
-      "quantity": 1
-    }
-  ]
-}
-
-###
-GET http://localhost:8080/orders
-
-###
-GET http://localhost:8080/order-items

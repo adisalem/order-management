@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "products")
@@ -16,6 +17,9 @@ public class Product {
     private String name;
 
     private Double price;
+
+    @Version
+    private Long version;
 
     public Product() {
     }
@@ -30,6 +34,10 @@ public class Product {
 
     public Double getPrice() {
         return price;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 
     public void setName(String name) {
