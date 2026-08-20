@@ -1,2 +1,31 @@
+### Admin login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### User login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "password"
+}
+
+### Get products
 GET http://localhost:8080/products
-Authorization: Basic YWRtaW46cGFzc3dvcmQ=
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Create product - Admin
+POST http://localhost:8080/products
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "price": 10.00
+}

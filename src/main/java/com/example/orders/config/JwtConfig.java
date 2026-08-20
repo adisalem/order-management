@@ -3,6 +3,7 @@ package com.example.orders.config;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -14,13 +15,13 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 @Configuration
 public class JwtConfig {
 
-    private static final String SECRET =
-            "my-super-secret-key-for-order-management-2026";
+    @Value("${JWT_SECRET}")
+    private String secret;
 
     @Bean
     SecretKey jwtSecretKey() {
         return new SecretKeySpec(
-                SECRET.getBytes(),
+                secret.getBytes(),
                 "HmacSHA256"
         );
     }
