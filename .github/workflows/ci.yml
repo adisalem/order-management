@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      JWT_SECRET: ci-test-secret-do-not-use-in-production-2026-abcdefghijklmnopqrstuvwxyz-1234567890
 
     steps:
       - name: Checkout source code
