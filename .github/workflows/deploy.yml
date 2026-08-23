@@ -14,7 +14,7 @@ jobs:
     name: Deploy to OKE
     runs-on: ubuntu-latest
 
-    # Only deploy when CI completed successfully.
+    # Deploy only when CI completed successfully.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
@@ -58,11 +58,12 @@ jobs:
 
           chmod 600 "${HOME}/.kube/config"
 
-      - name: Verify Kubernetes connection
+      - name: Verify Kubernetes access
         run: |
-          kubectl cluster-info
-          kubectl auth can-i get deployments
-          kubectl auth can-i update deployments
+          kubectl auth can-i get deployments -n default
+          kubectl auth can-i update deployments -n default
+          kubectl auth can-i get services -n default
+          kubectl auth can-i update services -n default
 
       - name: Apply RBAC
         run: |
