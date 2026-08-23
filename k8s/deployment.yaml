@@ -7,15 +7,17 @@ metadata:
 spec:
   replicas: 1
 
+  revisionHistoryLimit: 10
+
+  selector:
+    matchLabels:
+      app: order-management
+
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 0
       maxSurge: 1
-
-  selector:
-    matchLabels:
-      app: order-management
 
   template:
     metadata:
@@ -23,12 +25,19 @@ spec:
         app: order-management
 
     spec:
+      terminationGracePeriodSeconds: 30
+
       containers:
         - name: order-management
-          image: docker.io/adishadush/order-management:1.0.3
+
+          image: docker.io/adishadush/order-management:latest
+
+          imagePullPolicy: Always
 
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+              protocol: TCP
 
           env:
             - name: SPRING_PROFILES_ACTIVE
@@ -62,24 +71,25 @@ spec:
             requests:
               cpu: "250m"
               memory: "512Mi"
+
             limits:
               cpu: "500m"
               memory: "1Gi"
 
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 3
-
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 5
-            timeoutSeconds: 3
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
             failureThreshold: 3
