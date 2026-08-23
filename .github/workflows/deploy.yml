@@ -14,7 +14,6 @@ jobs:
     name: Deploy to OKE
     runs-on: ubuntu-latest
 
-    # Deploy only when CI completed successfully.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
@@ -64,12 +63,6 @@ jobs:
           kubectl auth can-i update deployments -n default
           kubectl auth can-i get services -n default
           kubectl auth can-i update services -n default
-
-      - name: Apply RBAC
-        run: |
-          kubectl apply -f k8s/service-account.yaml
-          kubectl apply -f k8s/role.yaml
-          kubectl apply -f k8s/role-binding.yaml
 
       - name: Apply Kubernetes Service
         run: |
