@@ -29,3 +29,12 @@ Content-Type: application/json
   "name": "Test Product",
   "price": 10.00
 }
+
+### Application health
+GET http://localhost:8080/actuator/health
+
+### Kubernetes liveness
+GET http://localhost:8080/actuator/health/liveness
+
+### Kubernetes readiness
+GET http://localhost:8080/actuator/health/readiness
